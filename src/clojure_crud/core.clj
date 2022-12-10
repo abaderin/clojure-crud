@@ -1,6 +1,7 @@
 (ns clojure-crud.core
   (:require [clojure.data.json :as json]
-            [ring.adapter.jetty :as jetty])
+            [ring.adapter.jetty :as jetty]
+            [clojure.tools.cli :refer [parse-opts]])
   (:gen-class))
 
 (def simple-response
@@ -36,6 +37,19 @@
   (.stop @server)
   (reset! server nil))
 
+(def args-specs
+  [["-p" "--port PORT" :default 8000 :parse-fn #(Integer. %)]
+   ["-P" "--db-port DBPORT" :default 27017 :parse-fn #(Integer. %)]
+   ["-H" "--db-host DBHOST" :default "localhost"]])
+
 (defn -main
   [& args]
-  (start-server {:join? true}))
+  (let [parsed-opts (parse-opts args args-specs)]
+    (if (:errors parsed-opts)
+      (println (:errors parsed-opts))
+      (let [{:keys [port db-host db-port]} (:options parsed-opts)]
+        (println parsed-opts)
+        (println (str "db-host=" db-host))
+        (println (str "db-port=" db-port))
+        (start-server {:join? true
+                       :port port})))))

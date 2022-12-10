@@ -8,5 +8,6 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [ring "1.9.6"]
-                 [org.clojure/data.json "2.4.0"]]
+                 [org.clojure/data.json "2.4.0"]
+                 [org.clojure/tools.cli "0.3.1"]]
   :repl-options {:init-ns clojure-crud.core})
